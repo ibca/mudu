@@ -2,6 +2,7 @@
     "name": "ibca/mudu",
     "description": "目睹直播api Composer",
     "license": "MIT",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "jackyang",
