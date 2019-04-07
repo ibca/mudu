@@ -1,0 +1,36 @@
+{
+    "name": "ibca/mudu",
+    "description": "目睹直播api Composer",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "jackyang",
+            "email": "ibca@163.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.0",
+        "illuminate/support": "5.2.* || 5.3.* || 5.4.* || 5.5.* || 5.6.* || 5.7.* || 5.8.*",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ibca\\Mudu\\": "src/"
+        }
+    },
+    "extra" : {
+        "branch-alias" : {
+            "dev-master" : "1.0-dev"
+        }
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^2.8",
+        "friendsofphp/php-cs-fixer": "^2.1"
+    },
+    "scripts": {
+        "check-style": "phpcs -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src",
+        "fix-style": "phpcbf -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src",
+        "style-fix" : "php-cs-fixer fix src --rules=@PSR2"
+    }
+}
+
