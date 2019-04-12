@@ -85,8 +85,6 @@ class MuduAPI
         $options = array();
         if ($act_manager_id !== ''){
             $options = array_merge(['act_manager_id' => $act_manager_id], $options);
-        } else {
-            return ['success' => false , 'message' => '频道名称必填'];
         }
 
         if ($start_time !== '') {
@@ -94,6 +92,8 @@ class MuduAPI
         }
         if ($name !== '') {
             $options = array_merge(['name' => $name], $options);
+        } else {
+            return ['success' => false , 'message' => '频道名称必填'];
         }
 
         $response = $this->client->request('POST', $api, [
