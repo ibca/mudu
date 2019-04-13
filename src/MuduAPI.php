@@ -41,7 +41,7 @@ class MuduAPI
      * live    直播状态，1为正在直播    integer
      * manager    频道管理员ID    integer
      * p    页码（每页30条数据）    integer
-     * @return $result [返回array数组对象]
+     * @return $result [返回json]
      */
     public function getActivities($live = '', $manager = '', $p = '')
     {
@@ -63,7 +63,7 @@ class MuduAPI
     /**
      * 获得频道
      * api: /v1/activities/{频道id}
-     * @return $result [返回array数组对象]
+     * @return $result [返回json]
      */
     public function getActivity($id){
         $api = '/v1/activities/'.$id;
@@ -77,7 +77,7 @@ class MuduAPI
      * name	频道名称	string	是
      * start_time	直播开始时间	datetime	否
      * act_manager_id	频道管理员ID	integer	否
-     * @return $result [返回array数组对象]
+     * @return $result [返回json]
      */
     public function createActivity($name = '',$start_time = '',$act_manager_id = ''){
 
@@ -104,9 +104,24 @@ class MuduAPI
     }
 
     /**
+     * 删除频道
+     * @param $频道id
+     * @return $result [返回json]
+     */
+    public function deleteActivity ($id = '') {
+        $api = '/v1/activities/'. $id;
+        if ($id === '') {
+            return ['success' => false , 'message' => '频道id:必填'];
+        }
+        $response = $this->client->request('DELETE', $api);
+        return  json_decode($response->getBody()->getContents());
+
+    }
+
+    /**
      * 获取频道报表
      * @param $频道id
-     * @return $result [返回array数组对象]
+     * @return $result [返回json]
      */
     public function getActivityReport($id = ''){
         $api = '/v1/activities/' . $id . '/report';
@@ -121,7 +136,7 @@ class MuduAPI
      * username	管理员用户名	string	是
      * cost_type	消费上限类型	integer	是	1表示时长限制，2表示流量限制
      * cost_limit	消费上限量	integer	是	当cost_type为1时单位为分钟， cost_type为2时，单位为GB
-     * @return $result [返回array数组对象]
+     * @return $result [返回json]
      */
     public function createManager($username = '' ,$cost_type = '', $cost_limit = ''){
         $api = '/v1/account/createActManager';
