@@ -61,7 +61,7 @@ class MuduAPI
     }
 
     /**
-     * 获得频道
+     * 获取指定频道
      * api: /v1/activities/{频道id}
      * @return $result [返回json]
      */
@@ -119,6 +119,62 @@ class MuduAPI
     }
 
     /**
+     * 修改频道信息
+     * @param $频道id
+     * @return $result [返回json]
+     */
+    public function updateActivity ($id = '', $name ='') {
+        $api = '/v1/activities/' . $id;
+        $options = array();
+        if ($name !== '') {
+            $options = array_merge(['name' => $name], $options);
+        } else {
+            return ['success' => false , 'message' => '频道名称必填'];
+        }
+        $response = $this->client->request('PUT', $api, [
+            'body' => json_encode($options)
+        ]);
+
+        return  json_decode($response->getBody()->getContents());
+    }
+
+    /**
+     * 修改频道观看页面信息
+     * @param $频道id
+     * start_time	直播开始时间	datetime	否
+     * pc_logo	PC端视频LOGO地址	string	否
+     * mobile_logo	移动端视频LOGO地址	string	否
+     * banner	banner地址	string	否
+     * cover_image	频道图标地址	string	否
+     * live_img	直播窗口背景地址	string	否
+     * footer	底部版权信息	string	否
+     * bg_color	观看页背景色	string	否	请传RGB颜色，如：rgb(255,255,255,1)或十六进制颜色码
+     * show_qrcode	是否显示手机观看二维码	bool	否	传true为显示，false为不显示
+     *theme	观看页主题	string	否	传default为默认主题，tech为科技版，默认为default
+     * @return $result [返回json]
+     */
+    public function updateActivityPage ($id = '', $start_time = '' , $pc_logo = '',
+                                        $mobile_logo = '', $banner = '', $cover_image = '',
+                                        $live_img = '', $footer = '', $bg_color = '#FFFFFF',
+                                        $show_qrcode = true, $theme = 'default') {
+        $api = '/v1/activities/'. $id .'/page';
+        if ($id === '') {
+            return ['success' => false , 'message' => '频道id:必填'];
+        }
+        $options = array('start_time' => $start_time, 'pc_logo' => $pc_logo,
+            'mobile_logo' => $mobile_logo, 'banner' => $banner,
+            'cover_image' => $cover_image, 'live_img' => $live_img,
+            'footer' => $footer, 'bg_color' => $bg_color,
+            'show_qrcode' => $show_qrcode, 'theme' => $theme);
+
+        $response = $this->client->request('PUT', $api, [
+            'body' => json_encode($options)
+        ]);
+        return  json_decode($response->getBody()->getContents());
+
+    }
+
+    /**
      * 获取频道报表
      * @param $频道id
      * @return $result [返回json]
@@ -164,7 +220,7 @@ class MuduAPI
         if ($manager_id === '' || $is_delete_act === '') {
             return ['success' => false , 'message' => '要删除的管理员ID,是否删除该管理员创建的频道:必填'];
         }
-        $options = array('$manager_id' => $manager_id, '$is_delete_act' => $is_delete_act);
+        $options = array('manager_id' => $manager_id, 'is_delete_act' => $is_delete_act);
         $response = $this->client->request('DELETE', $api, [
             'body' => json_encode($options)
         ]);
