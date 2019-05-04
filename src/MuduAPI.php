@@ -227,5 +227,79 @@ class MuduAPI
         return  json_decode($response->getBody()->getContents());
     }
 
+    /*****
+     * 获取评论列表
+     * @param $activity_id频道id
+     * @param $page页码
+     */
+    public function getComments($activity_id, $page = 1){
+        $api = '/v1/'. $activity_id .'/comments/' . $page;
+        if ($activity_id === '') {
+            return ['success' => false , 'message' => '频道id:必填'];
+        }
+        $response = $this->client->request('GET', $api);
+        return  json_decode($response->getBody()->getContents());
+    }
+
+
+    /***
+     * 删除评论
+     * @param $comment_id评论id
+     * @return array|mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function deleteComment($comment_id){
+        $api = '/v1/comment/'. $comment_id;
+        if ($comment_id === '') {
+            return ['success' => false , 'message' => '评论id:必填'];
+        }
+        $response = $this->client->request('DELETE', $api);
+        return  json_decode($response->getBody()->getContents());
+    }
+
+    /****
+     * 设置置顶评论
+     * @param $comment_id评论id
+     * @param int $top 1 置顶 0 取消置顶
+     * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function setCommentTop($comment_id, $top = 1){
+        $api = '/v1/comment/'. $comment_id .'/top';
+        $options = array();
+        if ($top !== '') {
+            $options = array_merge(['top' => $top], $options);
+        }
+        $response = $this->client->request('POST', $api, [
+            'body' => json_encode($options)
+        ]);
+        return  json_decode($response->getBody()->getContents());
+    }
+
+
+    /***
+     * 观众禁言
+     * @param $activity_id频道id
+     * @param $visitor_id观众id
+     * @param int $mute 1 禁言 0 取消禁言
+     * @param $user 观众昵称
+     * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function muteComment($activity_id, $visitor_id, $mute = 1, $user){
+        $api = '/v1/'. $activity_id .'/comment/'. $visitor_id .'/mute';
+        $options = array();
+        if ($mute !== '') {
+            $options = array_merge(['mute' => $mute], $options);
+        }
+        if ($user !== '') {
+            $options = array_merge(['user' => $user], $options);
+        }
+        $response = $this->client->request('POST', $api, [
+            'body' => json_encode($options)
+        ]);
+        return  json_decode($response->getBody()->getContents());
+    }
+
 
 }
